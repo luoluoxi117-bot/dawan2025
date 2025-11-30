@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大弯中学-2024级13班</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 100%);
+            color: #2c3e50;
+            padding-top: 60px;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        
+        .nav-logo {
+            color: #3498db;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-logo:hover {
+            color: #2980b9;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+        
+        .nav-link:hover {
+            background: rgba(52, 152, 219, 0.1);
+            color: #2980b9;
+        }
+        
+        /* 按钮 */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: #3498db;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+        
+        /* 遮罩 */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        /* 轮播图 */
+        .carousel {
+            margin-top: 0;
+            width: 100%;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            background-color: #000;
+        }
+        
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+        
+        .carousel-item {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .carousel-caption {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px 40px;
+            border-radius: 10px;
+        }
+        
+        .carousel-caption h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .carousel-caption p {
+            font-size: 18px;
+        }
+        
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .carousel-control {
+            background-color: rgba(255,255,255,0.3);
+            border: none;
+            color: white;
+            font-size: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-control:hover {
+            background-color: rgba(255,255,255,0.5);
+        }
+        
+        /* 班级介绍 */
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            border-radius: 2px;
+        }
+        
+        /* 照片 */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: 5px solid white;
+        }
+        
+        .photo-item:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+        
+        .photo-item:hover .photo-caption {
+            transform: translateY(0);
+        }
+        
+        /* 相册 */
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+        
+        .gallery-wrapper {
+            display: flex;
+            height: 100%;
+            transition: transform 0.3s ease;
+            cursor: grab;
+        }
+        
+        .gallery-wrapper:active {
+            cursor: grabbing;
+        }
+        
+        .image-row {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            flex-shrink: 0;
+            width: 404px;
+        }
+        
+        .image-item {
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            margin: 2px;
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+        }
+        
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .prev-button {
+            left: 10px;
+        }
+        
+        .next-button {
+            right: 10px;
+        }
+        
+        .indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .dot.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+        
+        /* 荣誉展示 */
+        .honors-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .honor-item {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(52, 152, 219, 0.1);
+        }
+        
+        .honor-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            background: white;
+        }
+        
+        .honor-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .honor-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: linear-gradient(to right, #2c3e50, #1a2530);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 50px;
+            font-size: 16px;
+        }
+        
+        /* 响应式设计 */
+        @media screen and (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 60px;
+                flex-direction: column;
+                background-color: rgba(255, 255, 255, 0.95);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0,0,0,0.05);
+                gap: 0;
+                padding: 20px 0;
+                height: calc(100vh - 60px);
+                overflow-y: auto;
+                backdrop-filter: blur(10px);
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-item {
+                margin: 10px 0;
+            }
+            
+            .nav-link {
+                padding: 15px 20px;
+                font-size: 18px;
+                color: #2c3e50;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 可折叠导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">2024级13班</a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">班级简介</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#activities" class="nav-link">精彩活动</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#memories" class="nav-link">美好回忆</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#gallery" class="nav-link">更多</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#honors" class="nav-link">班级荣誉</a>
+                </li>
+            </ul>
+
+            <!-- 汉堡菜单按钮 -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 轮播图 -->
+    <div id="home" class="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a5f7c17292.jpeg" alt="班级合照">
+                <div class="carousel-caption">
+                    <h2>2024级13班</h2>
+                    <p>团结友爱，奋发向上</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a64e641168.jpg" alt="周老师">
+                <div class="carousel-caption">
+                    <h2>班主任：周老师</h2>
+                    <p>尽心尽力，尽职尽责</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a660f553f6.jpeg" alt="文艺演出">
+                <div class="carousel-caption">
+                    <h2>文艺演出显才华</h2>
+                    <p>多才多艺，全面发展</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-controls">
+            <button class="carousel-control" onclick="moveSlide(-1)">❮</button>
+            <button class="carousel-control" onclick="moveSlide(1)">❯</button>
+        </div>
+    </div>
+
+    <!-- 班级简介 -->
+    <section id="about" class="section">
+        <h2 class="section-title">班级简介</h2>
+        <div class="photo-grid">
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a690533fe6.jpeg" alt="教室">
+                <div class="photo-caption">
+                    <h3>温馨教室</h3>
+                    <p>我们的第二个家</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a6fe20229b.jpeg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>运动健将</h3>
+                    <p>体育担当</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a705ea067c.jpeg" alt="大课间">
+                <div class="photo-caption">
+                    <h3>大课间</h3>
+                    <p>强身健体</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692afa98a8a63.jpeg" alt="大课间">
+                <div class="photo-caption">
+                    <h3>喝奶茶了吗</h3>
+                    <p>喝饱了……</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692afbbc139c3.jpeg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>运动会</h3>
+                    <p>入场</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692b05338a70b.jpeg" alt="大课间">
+                <div class="photo-caption">
+                    <h3>感谢周老师</h3>
+                    <p>么么哒</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="honors" class="section">
+        <h2 class="section-title">班级介绍</h2>
+        <div class="honors-container">
+            <div class="honor-item">
+                <div class="honor-title">高2024级13班</div>
+                <p>我们怀揣各自的热爱与理想，汇聚成一束温暖而坚定的光。课堂上，我们是思维碰撞的求知者，在知识的海洋中勇毅探索；赛场下，我们是并肩作战的伙伴，在协作中书写热血与荣光；生活里，我们是彼此的后盾，用包容与善意编织成长的经纬。</p>
+            </div>
+    </section>
+
+    <!-- 精彩活动 -->
+    <section id="activities" class="section">
+        <h2 class="section-title">精彩活动</h2>
+        <div class="photo-grid">
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a7a7a30ea1.jpeg" alt="获奖">
+                <div class="photo-caption">
+                    <h3>获奖</h3>
+                    <p></p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a668ab1617.jpeg" alt="公开课">
+                <div class="photo-caption">
+                    <h3>政治公开课</h3>
+                    <p>探索与创新</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a610ec1b4d.jpeg" alt="荣誉">
+                <div class="photo-caption">
+                    <h3>荣誉展示</h3>
+                    <p>骄傲自信</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a6aa73d538.jpeg" alt="六一儿童节">
+                <div class="photo-caption">
+                    <h3>六一儿童节</h3>
+                    <p>猜猜谁赢了？</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692b042461c69.png" alt="运动会">
+                <div class="photo-caption">
+                    <h3>合照</h3>
+                    <p>好看</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692b044d00e2a.jpeg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>曾一耀</h3>
+                    <p>好！</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bec907a05d.jpg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>曾瑜婷</h3>
+                    <p>厉害！</p>
+                </div>
+            </div>
+             <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bec8fa2835.jpg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>熊梓轩</h3>
+                    <p>有点帅</p>
+                </div>
+            </div>
+             <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692b032d173a6.jpeg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>余铮林</h3>
+                    <p>跑得快</p>
+                </div>
+            </div>
+             <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bec90c235e.jpg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>邓雅婷</h3>
+                    <p>比个心</p>
+                </div>
+            </div>
+             <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bec905fa7b.jpg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>刘美玲</h3>
+                    <p>毽球</p>
+                </div>
+            </div>
+             <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bece61cd5d.jpg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>胡睿</h3>
+                    <p>回眸一笑百媚生</p>
+                </div>
+            </div>
+             <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bece582094.jpg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>赵！！！</h3>
+                    <p>NB</p>
+                </div>
+            </div>
+             <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bece644b85.jpg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>熊梓轩</h3>
+                    <p>男神</p>
+                </div>
+            </div>
+             <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bece6a4167.jpg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>郭芳怡</h3>
+                    <p>好！</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 美好回忆 -->
+    <section id="memories" class="section">
+        <h2 class="section-title">美好回忆</h2>
+        <div class="photo-grid">
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a6bf1dfc72.jpeg" alt="girls">
+                <div class="photo-caption">
+                    <h3>Girls</h3>
+                    <p>姐妹情深</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a6e656d1c1.jpeg" alt="熊梓轩">
+                <div class="photo-caption">
+                    <h3>熊梓轩</h3>
+                    <p>在干啥？</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a6b5c1d1f2.jpeg" alt="尹思茹">
+                <div class="photo-caption">
+                    <h3>尹思茹</h3>
+                    <p>666</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692a6ee845e0a.jpeg" alt="陈冉浩">
+                <div class="photo-caption">
+                    <h3>陈冉浩</h3>
+                    <p>可爱捏</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692af5d878478.jpeg" alt="运动会">
+                <div class="photo-caption">
+                    <h3>黄一珃</h3>
+                    <p>运动会</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692af75f2dc90.jpeg" alt="曾一耀">
+                <div class="photo-caption">
+                    <h3>曾一耀</h3>
+                    <p>坚定得像是要入党</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692af8096ef98.jpeg" alt="曾天琦">
+                <div class="photo-caption">
+                    <h3>曾天琦</h3>
+                    <p>handsome</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692afedecdf05.jpeg" alt="研学">
+                <div class="photo-caption">
+                    <h3>单科状元</h3>
+                    <p>不容易</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692aff0cd9291.jpeg" alt="晚会">
+                <div class="photo-caption">
+                    <h3>罗希</h3>
+                    <p>AUV，我真帅</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/29/692b00b59f75b.jpeg" alt="晚会">
+                <div class="photo-caption">
+                    <h3>老魏</h3>
+                    <p>讲的真好</p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bee8e1e184.jpg" alt="晚会">
+                <div class="photo-caption">
+                    <h3>赵和耀</h3>
+                    <p></p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bf001d6909.jpg" alt="晚会">
+                <div class="photo-caption">
+                    <h3>合照</h3>
+                    <p></p>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://youke1.picui.cn/s1/2025/11/30/692bf014610d1.jpg" alt="晚会">
+                <div class="photo-caption">
+                    <h3>合照</h3>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 无缝拼图相册 -->
+    <section id="gallery" class="section">
+        <h2 class="section-title">更多</h2>
+        <div class="gallery-container">
+            <div class="gallery-wrapper" id="galleryWrapper">
+                <div class="image-row">
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692af8ccbbcb0.jpeg" alt="图片1">
+                    </div>
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692af92b9bb7c.jpeg" alt="图片2">
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692af97ac50d6.jpeg" alt="图片3">
+                    </div>
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692af99777d45.jpeg" alt="图片4">
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692af9c80ea00.jpeg" alt="图片5">
+                    </div>
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692af9e4ad831.jpeg" alt="图片6">
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692afb0a6f6bc.jpeg" alt="图片7">
+                    </div>
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692afb58a3b5b.jpeg" alt="图片8">
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692afe5821668.jpeg" alt="图片9">
+                    </div>
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692b02b23f978.jpeg" alt="图片10">
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692b025ec3c2c.jpeg" alt="图片11">
+                    </div>
+                    <div class="image-item">
+                        <img src="https://youke1.picui.cn/s1/2025/11/29/692b032d173a6.jpeg" alt="图片12">
+                    </div>
+                </div>
+            </div>
+
+            <button class="nav-button prev-button" id="prevBtn">‹</button>
+            <button class="nav-button next-button" id="nextBtn">›</button>
+
+            <div class="indicator" id="indicator"></div>
+        </div>
+    </section>
+
+    <!-- 班级荣誉 -->
+    <section id="honors" class="section">
+        <h2 class="section-title">班级荣誉</h2>
+        <div class="honors-container">
+            <div class="honor-item">
+                <div class="honor-icon">🏆</div>
+                <div class="honor-title">优秀班集体</div>
+                <p>我们是最棒的！</p>
+            </div>
+            <div class="honor-item">
+                <div class="honor-icon">🥇</div>
+                <div class="honor-title">年级第一</div>
+                <p>政治年级第一在我们班！</p>
+            </div>
+            <div class="honor-item">
+                <div class="honor-icon">📚</div>
+                <div class="honor-title">优秀的班主任</div>
+                <p>周老师太棒啦！！！</p>
+            </div>
+            <div class="honor-item">
+                <div class="honor-icon">🎨</div>
+                <div class="honor-title">不知道写啥了</div>
+                <p>好！</p>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2024级13班 | We are family.</p>
+        <p> luoxi7840@outlook.com</p>
+    </footer>
+
+    <script>
+        // 可折叠导航栏脚本
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const overlay = document.getElementById('overlay');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        overlay.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // 导航链接点击事件
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // 窗口大小改变时的处理
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // 滚动时导航栏效果
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.85)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.05)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // 轮播图脚本
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            const carouselInner = document.querySelector('.carousel-inner');
+            carouselInner.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        function moveSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            } else if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+            showSlide(currentSlide);
+        }
+
+        // 自动轮播
+        setInterval(() => {
+            moveSlide(1);
+        }, 6000);
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 无缝拼图相册脚本
+        const galleryWrapper = document.getElementById('galleryWrapper');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicator = document.getElementById('indicator');
+
+        let currentIndex = 0;
+        const totalColumns = document.querySelectorAll('.image-row').length;
+        const columnWidth = 404;
+
+        // 创建指示器
+        for (let i = 0; i < totalColumns; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            indicator.appendChild(dot);
+        }
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateGallery() {
+            galleryWrapper.style.transform = `translateX(-${currentIndex * columnWidth}px)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateGallery();
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalColumns;
+            updateGallery();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalColumns) % totalColumns;
+            updateGallery();
+        }
+
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        // 触摸滑动支持
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        galleryWrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+
+        galleryWrapper.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX;
+            const diff = startX - currentX;
+
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+                isDragging = false;
+            }
+        });
+
+        galleryWrapper.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        // 鼠标
+        let mouseStartX = 0;
+        let mouseIsDragging = false;
+
+        galleryWrapper.addEventListener('mousedown', (e) => {
+            mouseStartX = e.clientX;
+            mouseIsDragging = true;
+            galleryWrapper.style.cursor = 'grabbing';
+        });
+
+        galleryWrapper.addEventListener('mousemove', (e) => {
+            if (!mouseIsDragging) return;
+            const diff = mouseStartX - e.clientX;
+
+            if (Math.abs(diff) > 100) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+                mouseIsDragging = false;
+            }
+        });
+
+        galleryWrapper.addEventListener('mouseup', () => {
+            mouseIsDragging = false;
+            galleryWrapper.style.cursor = 'grab';
+        });
+
+        galleryWrapper.addEventListener('mouseleave', () => {
+            mouseIsDragging = false;
+            galleryWrapper.style.cursor = 'grab';
+        });
+    </script>
+</body>
+</html>
+<!-- 终于写完了，累死我了…… -->
